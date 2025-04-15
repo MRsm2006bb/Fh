@@ -6,6 +6,7 @@
   <style>
     body { font-family: Tahoma; text-align: center; padding: 50px; direction: rtl; background: #f0f0f0; }
     .box { background: white; padding: 30px; border-radius: 10px; width: 400px; margin: auto; box-shadow: 0 0 10px #ccc; }
+    button.copy-btn { margin-top: 10px; padding: 6px 12px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -33,10 +34,22 @@
 
       const data = await res.json();
       if (data.url) {
-        linkArea.innerHTML = '<p>رابط مباشر:</p><a href="' + data.url + '" target="_blank">' + data.url + '</a>';
+        linkArea.innerHTML = `
+          <p>رابط مباشر:</p>
+          <input type="text" id="videoLink" value="${data.url}" readonly style="width: 100%; padding: 5px;">
+          <button class="copy-btn" onclick="copyLink()">نسخ الرابط</button>
+        `;
       } else {
         linkArea.textContent = 'حدث خطأ أثناء الرفع.';
       }
+    }
+
+    function copyLink() {
+      const linkInput = document.getElementById('videoLink');
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // للموبايل
+      document.execCommand('copy');
+      alert('تم نسخ الرابط!');
     }
   </script>
 </body>
